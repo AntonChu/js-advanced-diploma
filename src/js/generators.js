@@ -10,6 +10,13 @@
  */
 export function* characterGenerator(allowedTypes, maxLevel) {
   // TODO: write logic here
+  const availableLevels = [...Array(maxLevel)].map((_, index) => index + 1);
+  const availableTypes = allowedTypes.map(i => i);
+  for (let item of allowedTypes) {
+    const heroNumber = Math.floor(Math.random * availableTypes.lenght);
+    const heroLevel = Math.floor(Math.random * availableLevels.lenght);
+    yield new allowedTypes[heroNumber](heroLevel);
+  }
 }
 
 /**

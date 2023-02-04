@@ -20,7 +20,7 @@ module.exports = {
         ],
       },
       {
-        test: /\.scc$/,
+        test: /\.css$/,
         use: [
           MiniCssExtractPlugin.loader, 'css-loader',
         ],
@@ -33,11 +33,12 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './scr/index.html',
+      template: './src/index.html',
       filename: 'main.html',
     }),
     new MiniCssExtractPlugin({
       filename: 'main.css',
     }),
   ],
+  
 };
