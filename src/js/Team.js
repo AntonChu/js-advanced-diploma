@@ -13,4 +13,11 @@
  * */
 export default class Team {
   // TODO: write your logic here
+  constructor(heroes) {
+    const teamOfHeroes = [];
+    heroes.forEach(element => {
+      teamOfHeroes.push(element.constructor.name);
+    });
+    this.characters = teamOfHeroes;
+  }
 }
