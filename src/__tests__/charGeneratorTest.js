@@ -1,7 +1,7 @@
 import Bowman from "../js/characters/Bowman";
 import Swordsman from '../js/characters/Swordsman';
 import Magician from '../js/characters/Magician';
-import { characterGenerator } from "../js/generators";
+import { characterGenerator } from '../js/generators';
 
 test('checking of correct generator\s work', () => {
     const allowedTypes = [Bowman, Swordsman, Magician];
