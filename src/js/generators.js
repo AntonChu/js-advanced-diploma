@@ -12,10 +12,10 @@ import Team from './Team';
 export function* characterGenerator(allowedTypes, maxLevel) {
   // TODO: write logic here
   const availableLevels = [...Array(maxLevel)].map((_, index) => index + 1);
-  const availableTypes = allowedTypes.map(i => i);
-  for (let _ of allowedTypes) {
+  const availableTypes = allowedTypes.map((i) => i);
+  for (const _ of allowedTypes) {
     const heroNumber = Math.floor(Math.random() * availableTypes.length);
-    const heroLevel = availableLevels[Math.floor(Math.random() * availableLevels.length)]; 
+    const heroLevel = availableLevels[Math.floor(Math.random() * availableLevels.length)];
     yield new (allowedTypes[heroNumber])(heroLevel);
   }
 }
@@ -25,7 +25,8 @@ export function* characterGenerator(allowedTypes, maxLevel) {
  * @param allowedTypes массив классов
  * @param maxLevel максимальный возможный уровень персонажа
  * @param characterCount количество персонажей, которое нужно сформировать
- * @returns экземпляр Team, хранящий экземпляры персонажей. Количество персонажей в команде - characterCount
+ * @returns экземпляр Team, хранящий экземпляры персонажей. Количество персонажей в
+ * команде - characterCount
  * */
 export function generateTeam(allowedTypes, maxLevel, characterCount) {
   // TODO: write logic here

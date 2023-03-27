@@ -49,5 +49,4 @@ module.exports = {
       filename: 'main.css',
     }),
   ],
-  
 };
