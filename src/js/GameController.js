@@ -13,6 +13,7 @@ export default class GameController {
   constructor(gamePlay, stateService) {
     this.gamePlay = gamePlay;
     this.stateService = stateService;
+    this.init();
     this.drawCharacters();
   }
 
