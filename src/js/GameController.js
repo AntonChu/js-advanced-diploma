@@ -36,7 +36,9 @@ export default class GameController {
   }
 
   drawCharacters() {
+    // this.init();
     const availableTeams = [[Bowman, Swordsman, Magician], [Vampire, Undead, Daemon]];
+    // const availableTeams = [[Bowman, Swordsman, Magician]];
     const positions = [
       [0, 1, 8, 9, 16, 17, 24, 25, 32, 33, 40, 41, 48, 49, 56, 57],
       [6, 7, 14, 15, 22, 23, 30, 31, 38, 39, 46, 47, 54, 55, 62, 63],
@@ -50,13 +52,13 @@ export default class GameController {
     const finalTeamPosition = [];
     const teamPositions = position.map((i) => i);
     const team = generateTeam(availableTeam, maxLevel, teamCapacity).characters;
-    // console.log(team);
     for (const item of team) {
       const finalCharacterPosition = teamPositions[Math.floor(Math.random() * teamPositions.length)];
       finalTeamPosition.push(new PositionedCharacter(item, finalCharacterPosition));
       teamPositions.splice(teamPositions.findIndex((el) => el === finalCharacterPosition), 1);
     }
-    console.log(finalTeamPosition);
     this.gamePlay.redrawPositions(finalTeamPosition);
   }
 }
+
+// тоже все ок массивы класса PositionedCharacter с позициями формируются и отправляются в GamePlay

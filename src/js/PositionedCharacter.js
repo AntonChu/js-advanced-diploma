@@ -14,3 +14,5 @@ export default class PositionedCharacter {
     this.position = position;
   }
 }
+
+// тут все ок классы персонажей и позиции выдаются, все корректно

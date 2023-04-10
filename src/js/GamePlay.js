@@ -27,6 +27,7 @@ export default class GamePlay {
    * @param theme
    */
   drawUi(theme) {
+    console.log('method drawUI')
     this.checkBinding();
 
     this.container.innerHTML = `
@@ -69,9 +70,10 @@ export default class GamePlay {
    * @param positions array of PositionedCharacter objects
    */
   redrawPositions(positions) {
-    for (const cell of this.cells) {
-      cell.innerHTML = '';
-    }
+    console.log('method redraw')
+    // for (const cell of this.cells) {
+    //   cell.innerHTML = '';
+    // }
 
     for (const position of positions) {
       const cellEl = this.boardEl.children[position.position];
@@ -80,7 +82,7 @@ export default class GamePlay {
 
       const healthEl = document.createElement('div');
       healthEl.classList.add('health-level');
-
+      
       const healthIndicatorEl = document.createElement('div');
       healthIndicatorEl.classList.add('health-level-indicator', `health-level-indicator-${calcHealthLevel(position.character.health)}`);
       healthIndicatorEl.style.width = `${position.character.health}%`;
