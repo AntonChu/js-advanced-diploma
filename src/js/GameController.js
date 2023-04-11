@@ -25,10 +25,12 @@ export default class GameController {
 
   onCellClick(index) {
     // TODO: react to click
+
   }
 
   onCellEnter(index) {
     // TODO: react to mouse enter
+    
   }
 
   onCellLeave(index) {
@@ -59,6 +61,9 @@ export default class GameController {
     }
     this.gamePlay.redrawPositions(finalTeamPosition);
   }
-}
 
-// тоже все ок массивы класса PositionedCharacter с позициями формируются и отправляются в GamePlay
+  showInfo() {
+    this.gamePlay.addCellEnterListener(this.onCellEnter)
+  }
+
+}

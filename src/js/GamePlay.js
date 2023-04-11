@@ -8,6 +8,7 @@ export default class GamePlay {
     this.cells = [];
     this.cellClickListeners = [];
     this.cellEnterListeners = [];
+    console.log(this.cellEnterListeners)
     this.cellLeaveListeners = [];
     this.newGameListeners = [];
     this.saveGameListeners = [];
@@ -149,8 +150,14 @@ export default class GamePlay {
 
   onCellEnter(event) {
     event.preventDefault();
+    if(event.target.children.length < 1) {
+      return;
+    }
     const index = this.cells.indexOf(event.currentTarget);
-    this.cellEnterListeners.forEach((o) => { o.call(null, index); });
+    console.log(index);
+    this.cellEnterListeners.forEach((o) => { 
+      o.call(null, index); 
+    });
   }
 
   onCellLeave(event) {
