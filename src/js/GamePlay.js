@@ -153,6 +153,7 @@ export default class GamePlay {
     if(event.target.children.length < 1) {
       return;
     }
+    console.log(event)
     const index = this.cells.indexOf(event.currentTarget);
     console.log(index);
     this.cellEnterListeners.forEach((o) => { 
