@@ -8,11 +8,12 @@ export default class GamePlay {
     this.cells = [];
     this.cellClickListeners = [];
     this.cellEnterListeners = [];
-    console.log(this.cellEnterListeners)
     this.cellLeaveListeners = [];
     this.newGameListeners = [];
     this.saveGameListeners = [];
     this.loadGameListeners = [];
+
+    this.heroes = {}
   }
 
   bindToDOM(container) {
@@ -28,7 +29,6 @@ export default class GamePlay {
    * @param theme
    */
   drawUi(theme) {
-    console.log('method drawUI')
     this.checkBinding();
 
     this.container.innerHTML = `
@@ -71,10 +71,15 @@ export default class GamePlay {
    * @param positions array of PositionedCharacter objects
    */
   redrawPositions(positions) {
-    console.log('method redraw')
-    // for (const cell of this.cells) {
-    //   cell.innerHTML = '';
-    // }
+    // цикл добавляющий позиции и характеристики в созданную this.heroes
+    for (const character of positions) {
+      this.heroes[character.position] = character.character
+    }
+    // console.log(this.heroes)
+
+    for (const cell of this.cells) {
+      cell.innerHTML = '';
+    }
 
     for (const position of positions) {
       const cellEl = this.boardEl.children[position.position];
@@ -150,12 +155,10 @@ export default class GamePlay {
 
   onCellEnter(event) {
     event.preventDefault();
-    if(event.target.children.length < 1) {
-      return;
-    }
-    console.log(event)
+    // if(event.target.children.length < 1) {
+    //   return;
+    // }
     const index = this.cells.indexOf(event.currentTarget);
-    console.log(index);
     this.cellEnterListeners.forEach((o) => { 
       o.call(null, index); 
     });
