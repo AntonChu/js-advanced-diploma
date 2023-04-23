@@ -155,9 +155,6 @@ export default class GamePlay {
 
   onCellEnter(event) {
     event.preventDefault();
-    // if(event.target.children.length < 1) {
-    //   return;
-    // }
     const index = this.cells.indexOf(event.currentTarget);
     this.cellEnterListeners.forEach((o) => { 
       o.call(null, index); 
@@ -204,9 +201,14 @@ export default class GamePlay {
   }
 
   deselectCell(index) {
-    const cell = this.cells[index];
-    cell.classList.remove(...Array.from(cell.classList)
-      .filter((o) => o.startsWith('selected')));
+    // const cell = this.cells[index];
+    // cell.classList.remove(...Array.from(cell.classList)
+    //   .filter((o) => o.startsWith('selected')));
+
+    const cells = this.cells.filter((_, idx) => idx !== index);
+    cells.forEach((item) => item.classList.remove(...Array.from(item.classList).filter((o) =>
+    o.startsWith('selected'))
+    ))
   }
 
   showCellTooltip(message, index) {
