@@ -37,10 +37,13 @@ export default class GameController {
     ) {
       this.gamePlay.deselectCell(index);
       this.gamePlay.selectCell(index);
-      this.availableAction();
+      this.availableAction(index);
     } else {
       this.gamePlay.deselectCell(index);
-      GamePlay.showError("Choose your team character!");
+      const condition = this.gamePlay.cells.find(el => el.classList.contains('selected'));
+      if (!condition) {
+        GamePlay.showError("Choose your team character!");
+      }
     }
   }
 
@@ -102,7 +105,8 @@ export default class GameController {
     const attack = String.fromCodePoint(0x2694);
     const defence = String.fromCodePoint(0x1f6e1);
     const health = String.fromCodePoint(0x2764);
-    const hero = this.gamePlay.heroes[index];
+    const hero = this.gamePlay.heroes.find(el => el.position === index).character;
+
     return (
       level +
       hero.level +
@@ -118,7 +122,7 @@ export default class GameController {
     );
   }
 
-  availableAction() {
+  availableAction(index) {
     const oportunity = {
       Bowman: { attack: 2, distance: 2 },
       Swordsman: { attack: 1, distance: 4 },
@@ -134,9 +138,6 @@ export default class GameController {
       [48, 49, 50, 51, 52, 53, 54, 55],
       [56, 57, 58, 59, 60, 61, 62, 63],
     ];
-    const index = this.gamePlay.cells.findIndex((el) =>
-      el.classList.contains("selected")
-    );
     const selectedHeroClass = this.gamePlay.cells[index].children[0].classList;
     const targetRaw = map.findIndex((el) => el.includes(index));
     const targetColumn = map[targetRaw].findIndex((el) => el === index);
@@ -164,12 +165,37 @@ export default class GameController {
       targetRaw,
       targetColumn
     );
+     
+    arrMove.forEach((el) => el.onclick = () => {
+      this.gamePlay.heroes = this.gamePlay.heroes.map(el => {
+        
+        if(el.position === index) {
+          const newPosition = this.gamePlay.cells.findIndex(item => item.classList.contains('selected-green'));
+          return new PositionedCharacter(el.character, newPosition)
+        } else {
+          return el;
+        }
+      })
+      this.gamePlay.redrawPositions(this.gamePlay.heroes);
+      this.gamePlay.deselectCell(index);
+    });
+  
     const arrAttack = this.defineCells(
       selectedHero.attack,
       map,
       targetRaw,
       targetColumn
-    );
+    ).filter(el => {
+      return (
+      el.hasChildNodes() && (
+      el.children[0].classList.contains("Zombie") ||
+      el.children[0].classList.contains("Undead") ||
+      el.children[0].classList.contains("Daemon")));
+    });
+
+    arrAttack.forEach((el) => el.onclick = () => {
+      
+    });
 
     this.gamePlay.cells.forEach((el) => el.onmouseenter = (event) => {
       const hasEnemy = event.target.hasChildNodes() && (
