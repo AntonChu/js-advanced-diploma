@@ -19,6 +19,9 @@ export default class Character {
     this.defence = 0;
     this.health = 50;
     this.type = type;
+    this.player = 0;
+    this.tripRadius = 0;
+    this.attackRadius = 0;
     // TODO: выбросите исключение, если кто-то использует "new Character()"
     if (new.target === Character) {
       throw new Error('The parent\'s class unavailable for creation');

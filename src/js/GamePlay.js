@@ -12,8 +12,6 @@ export default class GamePlay {
     this.newGameListeners = [];
     this.saveGameListeners = [];
     this.loadGameListeners = [];
-
-    this.heroes = {}
   }
 
   bindToDOM(container) {
@@ -71,14 +69,6 @@ export default class GamePlay {
    * @param positions array of PositionedCharacter objects
    */
   redrawPositions(positions) {
-    // console.log(positions)
-    // цикл добавляющий позиции и характеристики в созданную this.heroes
-    // for (const character of positions) {
-    //   this.heroes[character.position] = character.character
-    // }
-    this.heroes = positions;
-    
-
     for (const cell of this.cells) {
       cell.innerHTML = '';
     }
@@ -90,7 +80,6 @@ export default class GamePlay {
 
       const healthEl = document.createElement('div');
       healthEl.classList.add('health-level');
-      
       const healthIndicatorEl = document.createElement('div');
       healthIndicatorEl.classList.add('health-level-indicator', `health-level-indicator-${calcHealthLevel(position.character.health)}`);
       healthIndicatorEl.style.width = `${position.character.health}%`;
@@ -158,8 +147,8 @@ export default class GamePlay {
   onCellEnter(event) {
     event.preventDefault();
     const index = this.cells.indexOf(event.currentTarget);
-    this.cellEnterListeners.forEach((o) => { 
-      o.call(null, index); 
+    this.cellEnterListeners.forEach((o) => {
+      o.call(null, index);
     });
   }
 
@@ -203,15 +192,15 @@ export default class GamePlay {
   }
 
   deselectCell(index) {
-    // const cell = this.cells[index];
-    // cell.classList.remove(...Array.from(cell.classList)
-    //   .filter((o) => o.startsWith('selected')));
+    const cell = this.cells[index];
+    cell.classList.remove(...Array.from(cell.classList)
+      .filter((o) => o.startsWith('selected')));
 
     // нужно доработать добавить в переменную прошлый индекс и его стирать
-    const cells = this.cells.filter((_, idx) => idx !== index);
-    cells.forEach((item) => item.classList.remove(...Array.from(item.classList).filter((o) =>
-    o.startsWith('selected'))
-    ))
+    // const cells = this.cells.filter((_, idx) => idx !== index);
+    // cells.forEach((item) => item.classList.remove(...Array.from(item.classList).filter((o) =>
+    // o.startsWith('selected'))
+    // ))
   }
 
   showCellTooltip(message, index) {
