@@ -12,6 +12,7 @@ export default class GamePlay {
     this.newGameListeners = [];
     this.saveGameListeners = [];
     this.loadGameListeners = [];
+    this.popup = null;
   }
 
   bindToDOM(container) {
@@ -19,6 +20,13 @@ export default class GamePlay {
       throw new Error('container is not HTMLElement');
     }
     this.container = container;
+  }
+
+  bindPopup(popup) {
+    if (!(popup instanceof HTMLElement)) {
+      throw new Error('container is not HTMLElement');
+    }
+    this.popup = popup;
   }
 
   /**
@@ -43,10 +51,12 @@ export default class GamePlay {
     this.newGameEl = this.container.querySelector('[data-id=action-restart]');
     this.saveGameEl = this.container.querySelector('[data-id=action-save]');
     this.loadGameEl = this.container.querySelector('[data-id=action-load]');
+    this.popupCloseButton = this.popup.querySelector('.popup__button');
 
     this.newGameEl.addEventListener('click', (event) => this.onNewGameClick(event));
     this.saveGameEl.addEventListener('click', (event) => this.onSaveGameClick(event));
     this.loadGameEl.addEventListener('click', (event) => this.onLoadGameClick(event));
+    this.popupCloseButton.addEventListener('click', () => this.closePopup());
 
     this.boardEl = this.container.querySelector('[data-id=board]');
 
@@ -178,14 +188,6 @@ export default class GamePlay {
     this.loadGameListeners.forEach((o) => o.call(null));
   }
 
-  static showError(message) {
-    alert(message);
-  }
-
-  static showMessage(message) {
-    alert(message);
-  }
-
   selectCell(index, color = 'yellow') {
     this.deselectCell(index);
     this.cells[index].classList.add('selected', `selected-${color}`);
@@ -234,5 +236,15 @@ export default class GamePlay {
     if (this.container === null) {
       throw new Error('GamePlay not bind to DOM');
     }
+  }
+
+  closePopup() {
+    this.popup.classList.add('popup_hidden');
+  }
+
+  showPopup(message) {
+    const title = this.popup.querySelector('.popup__title');
+    title.textContent = message;
+    this.popup.classList.remove('popup_hidden');
   }
 }

@@ -14,6 +14,8 @@
     "rules": {
         "no-plusplus": "off",
         "max-len": ["error", { "code": 150 }],
-        "no-restricted-syntax": ["error", "WithStatement"]
+        "no-restricted-syntax": ["error", "WithStatement"],
+        "prefer-destructuring": ["error", {"object": true, "array": false}],
+        "class-methods-use-this": ["error", { "exceptMethods": ["showInfo", "availableAction"] }]
     }
 }

@@ -52,12 +52,12 @@ export default class GameController {
         this.attack(hero.character, this.gameState.selectedHero.character, index, this.gameState.selectedHero.position);
       }
       if (hero && hero.character.player === 'enemy' && !this.gameState.availableAttack.includes(index)) {
-        alert('Враг слишком далеко!');
+        this.gamePlay.showPopup('Враг слишком далеко!');
       }
       return;
     }
     if (!this.gameState.selectedHero) {
-      alert('выберите персонажа своей команды');
+      this.gamePlay.showPopup('выберите персонажа своей команды');
     }
   }
 
@@ -87,7 +87,7 @@ export default class GameController {
 
   saveGame() {
     this.stateService.save(this.gameState);
-    alert('Игра сохранена');
+    this.gamePlay.showPopup('Игра сохранена');
   }
 
   loadGame() {
@@ -102,7 +102,7 @@ export default class GameController {
       }
     } catch (error) {
       GameController.clearLocalStorage('state');
-      alert(`Ошибка загрузки: "${error.message}"`);
+      this.gamePlay.showPopup(`Ошибка загрузки: "${error.message}"`);
       this.newGame();
     }
   }
@@ -144,20 +144,21 @@ export default class GameController {
       this.drawCharacters('user', survived);
       // новая команда enemy
       this.drawCharacters('enemy');
-      alert(`Уровень ${level} Счет: ${this.gameState.scores}`);
+      this.gamePlay.showPopup(`Уровень ${level} Счет: ${this.gameState.scores}`);
     }
 
     if (level > 4) {
       // Блокировка поля
       this.gamePlay.cellClickListeners.length = 0;
-      alert(`Победа! Игра окончена. Счет: ${this.gameState.scores}`);
+      this.gamePlay.showPopup(`Победа! Игра окончена. Счет: ${this.gameState.scores}`);
     } else {
       this.gamePlay.drawUi(Object.values(themes)[this.gameState.level - 1]);
       this.gamePlay.redrawPositions(this.gameState.teams);
     }
   }
 
-  static levelUp(isNew, personage) {
+  static levelUp(isNew, hero) {
+    const personage = hero;
     if (isNew) {
       let levelsImprove = personage.level - 1;
       while (levelsImprove) {
@@ -187,23 +188,23 @@ export default class GameController {
       return;
     }
     if (!enemyPersonage) {
-      alert('enemy lost');
+      this.gamePlay.showPopup('enemy lost');
       this.gameState.clear();
       this.gameState.addScores();
       this.nextLevel(this.gameState.level += 1);
     }
     if (!userPersonage) {
-      alert('You lost! Try again!', `Счет: ${this.gameState.scores}`);
+      this.gamePlay.showPopup('You lost! Try again!', `Счет: ${this.gameState.scores}`);
     }
   }
 
   drawCharacters(who, createdCharacters = []) {
     const options = {
-      'user': {
+      user: {
         team: [Bowman, Swordsman, Magician],
         positions: [0, 1, 8, 9, 16, 17, 24, 25, 32, 33, 40, 41, 48, 49, 56, 57],
       },
-      'enemy': {
+      enemy: {
         team: [Vampire, Undead, Daemon],
         positions: [6, 7, 14, 15, 22, 23, 30, 31, 38, 39, 46, 47, 54, 55, 62, 63],
       },
@@ -256,13 +257,13 @@ export default class GameController {
         let zeroRaw = [];
         for (let i = -distance; i <= distance; i++) {
           if (targetColumn + i < 0 || targetColumn + i > 7) {
-            continue;
+            continue; // eslint-disable-line
           }
           zeroRaw.push(item[targetColumn + i]);
         }
-        zeroRaw = zeroRaw.filter((_, ind) => ind !== targetColumn);
+        zeroRaw = zeroRaw.filter((_, ind) => ind !== index);
         newArr.push(...zeroRaw);
-        continue;
+        continue; // eslint-disable-line
       }
 
       for (let i = 1; i <= distance; i++) {
@@ -303,21 +304,21 @@ export default class GameController {
 
   computerLogic() {
     const { teams } = this.gameState;
-    const computerOptions = teams.filter((member) => member.character.player === 'enemy').map((el) => {
-      return {
+    const computerOptions = teams.filter((member) => member.character.player === 'enemy').map((el) => (
+      {
         hero: el.character,
         position: el.position,
         attackPosition: this.availableAction(el.character.attackRadius, el.position),
         movePosition: this.availableAction(el.character.tripRadius, el.position),
-      };
-    });
-    const userOptions = teams.filter((member) => member.character.player === 'player').map((el) => {
-      return {
+      }
+    ));
+    const userOptions = teams.filter((member) => member.character.player === 'player').map((el) => (
+      {
         hero: el.character,
         position: el.position,
         health: el.character.health,
-      };
-    });
+      }
+    ));
     // Проверяем возможность атаки
     const allUserPositions = userOptions.map((userHero) => userHero.position);
     let whoCanAttack = computerOptions.map((el) => {
@@ -348,20 +349,20 @@ export default class GameController {
         for (const move of item.movePosition) {
           // отбрасываем все занятые клетки
           if (teams.find((el) => el.position === move)) {
-            continue;
+            continue; // eslint-disable-line
           }
           //  коллекционируем все варианты ходов откуда персонаж враг может атаковать
           let interArr = this.availableAction(item.hero.attackRadius, move);
           interArr = interArr.filter((el) => userOptions.find((i) => i.position === el));
-          interArr = interArr.map((el) => {
-            return {
+          interArr = interArr.map((el) => (
+            {
               potentialVictimPosition: el,
               victim: userOptions.find((i) => i.position === el).hero,
               predator: item.hero,
               predatorPosition: item.position,
               predatorMove: move,
-            };
-          });
+            }
+          ));
           arr.push(...interArr);
         }
         if (arr.length > 0) {
